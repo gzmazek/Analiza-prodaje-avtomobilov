@@ -1,11 +1,11 @@
 import re
 import json
-import csv
+import orodja
 
 #######################################
 
 ZNAMKA_STRANI = [("mercedes-benz", 971), ("bmw", 918), ("audi", 508)]
-ZNAMKA_STRANI_POSKUS = [("mercedes-benz", 90), ("bmw", 91), ("audi", 50)]
+ZNAMKA_STRANI_POSKUS = [("mercedes-benz", 9), ("bmw", 9), ("audi", 5)]
 
 pravilnih = 0
 
@@ -49,8 +49,6 @@ def predelaj_podatki_motor(podatki):
     slovar_podatki = re.search(r'MPG:\s(?P<MPG_city>\d+)-(?P<MPG_highway>\d+),\sEngine:\s(?P<engine>.*),\sTransmission:\s(?P<transmission>.*),\s(?P<drive_type>.*)', podatki).groupdict()
     return slovar_podatki
         
-
-
 #####################################################################################################################
 #####################################################################################################################
 
@@ -60,6 +58,7 @@ def predelaj_podatke_oglasa(oglas, znamka):
         osnovni_podatki = predelaj_primary(avto.pop("primary"), znamka)
         avto["VIN"] = osnovni_podatki["VIN"]
         avto["year"] = int(osnovni_podatki["year"])
+        avto["znamka"] = znamka
         avto["model"] = osnovni_podatki["model"]
         avto["price"] = int(avto["price"].lstrip("$").replace(",", ""))
         avto["miles"] = int(avto["miles"].replace(",", ""))
@@ -84,7 +83,7 @@ def predelaj_podatke_oglasa(oglas, znamka):
 
 cars = []
 
-for ZNAMKA, STRANI in ZNAMKA_STRANI_POSKUS:
+for ZNAMKA, STRANI in ZNAMKA_STRANI:
     for i in range(1, STRANI):
         with open(f"cars_data_{ZNAMKA}/{ZNAMKA}_page_{i}.html") as f:
             vsebina = f.read()
@@ -96,12 +95,7 @@ for ZNAMKA, STRANI in ZNAMKA_STRANI_POSKUS:
 with open("cars.json", "w") as f:
     json.dump(cars, f, ensure_ascii=False, indent=4)
 
-# with open("cars.csv", "w") as f:
-#    pisatelj = csv.DictWriter(f, fieldnames=[])
-#    pisatelj.writeheader()
-#    for car in cars:
-#        pisatelj.writerow(car)
-
-
-# halo = "mercesed-benz"
-# print(re.search(fr'(?P<VIN>.+)/(?P<year>\d{{4}})-{halo}-(?P<model>.*)', 'WA1ANAFYXK2079056/2019-audi-q5').groupdict()["year"])
+orodja.zapisi_csv(
+    cars,
+    ["VIN", "year", "znamka", "model", "state", "city", "price", "miles", "accidents", "use", "owners", "MPG_city", "MPG_highway", "engine", "transmission", "drive_type", "exterior", "interior"], "cars.csv"
+)
