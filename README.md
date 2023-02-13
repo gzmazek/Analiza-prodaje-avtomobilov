@@ -14,8 +14,13 @@ Podatke bom zbiral iz [Spletne strani Truecar](https://www.truecar.com) o cenah 
 
 S pridobljenimi podatki želim ugotoviti:
 - kakšno je razmerje med starostjo avtomobila in ceno,
-- v katerih mestih so cene vozil v povprečji višje,
-- katere znamke avtomobilov imajo najboljšo razmerje med karakteristikami vozila in ceno,
-- kakšna je povprečna poraba avtomobilov v odvisnosti od cene.
+- ali starost avtomobila vpliva eksponentno na ceno,
+- kateri podatki so odvisni med seboj in kateri neodvisno vplivajo na ceno,
+- ali so avtomobili z avtomatičnim menjalnikom povprečno dražji?
 
 ---
+
+# Nameščanje dodatnih knjižnic
+
+V obdelavi podatkov sem uporabil knjižnico seaborn, ki jo namestite z ukazom `pip install seaborn` ali `pip3 install seaborn`
+
